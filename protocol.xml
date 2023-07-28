@@ -50,13 +50,15 @@ DATE		VERSION		AUTHOR			COMMENTS
 05/06/2019	1.0.0.1		PDB, Skyline	Initial Version
 06/12/2019	1.0.0.2		KAN, Skyline	General Improvements.
 27/01/2020	1.0.0.3		PDB, Skyline	Added example for serial response matching length parameter being of type "next param" (RN 24442).
+
+migrated and restarted at 1.0.0.1.
 ****************************************************************************
 
 -->
 <Protocol xmlns="http://www.skyline.be/protocol">
 	<Name>SLC SDF Serial Response Matching</Name>
 	<Description>SLC SDF Serial Response Matching</Description>
-	<Version>1.0.0.3</Version>
+	<Version>1.0.0.1</Version>
 	<IntegrationID>DMS-DRV-0000</IntegrationID>
 	<Provider>Skyline Communications</Provider>
 	<Vendor>Skyline Communications</Vendor>
@@ -1771,7 +1773,7 @@ For more information, refer to the Protocol Development Library.
 						<MajorVersions>
 							<MajorVersion id="0">
 								<MinorVersions>
-									<MinorVersion id="3" basedOn="None">
+									<MinorVersion id="1">
 										<Date>2023-07-28</Date>
 										<Provider>
 											<Author>JST</Author>
