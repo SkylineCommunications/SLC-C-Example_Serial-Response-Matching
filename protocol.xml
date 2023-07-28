@@ -1,0 +1,1795 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+****************************************************************************
+*  Copyright (c) 2023,  Skyline Communications NV  All Rights Reserved.    *
+****************************************************************************
+
+By using this driver, you expressly agree with the usage terms and
+conditions set out below.
+This driver and all related materials are protected by copyrights and
+other intellectual property rights that exclusively belong
+to Skyline Communications.
+
+A user license granted for this driver is strictly for personal use only.
+This driver may not be used in any way by anyone without the prior
+written consent of Skyline Communications. Any sublicensing of this
+driver is forbidden.
+
+Any modifications to this driver by the user are only allowed for
+personal use and within the intended purpose of the driver,
+and will remain the sole responsibility of the user.
+Skyline Communications will not be responsible for any damages or
+malfunctions whatsoever of the driver resulting from a modification
+or adaptation by the user.
+
+The content of this driver is confidential information.
+The user hereby agrees to keep this confidential information strictly
+secret and confidential and not to disclose or reveal it, in whole
+or in part, directly or indirectly to any person, entity, organization
+or administration without the prior written consent of
+Skyline Communications.
+
+Any inquiries can be addressed to:
+
+	Skyline Communications NV
+	Ambachtenstraat 33
+	B-8870 Izegem
+	Belgium
+	Tel.	: +32 51 31 35 69
+	Fax.	: +32 51 31 01 29
+	E-mail	: info@skyline.be
+	Web		: www.skyline.be
+	Contact	: Ben Vandenberghe
+
+****************************************************************************
+Revision History:
+
+DATE		VERSION		AUTHOR			COMMENTS
+
+05/06/2019	1.0.0.1		PDB, Skyline	Initial Version
+06/12/2019	1.0.0.2		KAN, Skyline	General Improvements.
+27/01/2020	1.0.0.3		PDB, Skyline	Added example for serial response matching length parameter being of type "next param" (RN 24442).
+****************************************************************************
+
+-->
+<Protocol xmlns="http://www.skyline.be/protocol">
+	<Name>SLC SDF Serial Response Matching</Name>
+	<Description>SLC SDF Serial Response Matching</Description>
+	<Version>1.0.0.3</Version>
+	<IntegrationID>DMS-DRV-0000</IntegrationID>
+	<Provider>Skyline Communications</Provider>
+	<Vendor>Skyline Communications</Vendor>
+	<VendorOID>1.3.6.1.4.1.8813.2.48</VendorOID>
+	<DeviceOID>999</DeviceOID>
+	<ElementType>Training Example</ElementType>
+	<Type relativeTimers="true">serial</Type>
+	<Display defaultPage="General" pageOrder="General;A - Header|Next Param|Trailer;B - Fixed Length|Fixed Length|Fixed Length;C - Fixed Length|Next Param|Fixed Length|Length|Next Param;D - Header|Length|Next Param|Trailer;E - Fixed Length|Next Param|Fixed Length|Fixed Length|Other Param;F - Fixed Length|Length (&quot;next param&quot;)|Fixed Length|Next Param" wideColumnPages="" />
+	<SNMP includepages="true">auto</SNMP>
+	<Params>
+		<Param id="3">
+			<Name>aboutThisProtocol</Name>
+			<Description>About</Description>
+			<Type>read</Type>
+			<Information>
+				<Subtext>Info about this protocol.</Subtext>
+			</Information>
+			<Interprete>
+				<RawType>other</RawType>
+				<Type>string</Type>
+				<LengthType>next param</LengthType>
+				<DefaultValue>
+					<![CDATA[This protocol gives an overview of different ways to perform response matching:
+					
+- A - Header|Next Param|Trailer : The response consists of a header and a trailer with a next param in between. e.g. [START]myTest[END]. This response will be taken in before timeout time.
+
+- B - Fixed Length|Fixed Length|Fixed Length : All response parameters have a fixed length. e.g. COMMAND_B:MyData. This response will be taken in before timeout time.
+
+- C - Fixed Length|Next Param|Fixed Length|Length|Next Param : The response contains a length indication and ending with the referenced data. This response will be taken in before timeout time. Response will fail when more or less data is received then defined in the length parameter by using the length action. e.g. COMMAND_CMyTest:02BB
+
+- D - Header|Length|Next Param|Trailer : The response wil be taken in before timeout time due to availability of header and trailer. Response will fail when more or less data is received then defined in the length parameter by using the length action.  e.g. [START]02AA[END] 
+
+- E - Fixed Length|Next Param|Fixed Length|Fixed Length|Other Param : The response will be taken in on timeout time since parameter type length is not used. In case more data is received, it will cut-off based on the expected length.  e.g. COMMAND_EMyTest:02AA
+
+For more information, refer to the Protocol Development Library.
+					]]>
+				</DefaultValue>
+			</Interprete>
+			<Display>
+				<RTDisplay>true</RTDisplay>
+				<Positions>
+					<Position>
+						<Page>General</Page>
+						<Row>0</Row>
+						<Column>0</Column>
+					</Position>
+				</Positions>
+			</Display>
+			<Measurement>
+				<Type lines="40">string</Type>
+			</Measurement>
+		</Param>
+		<Param id="4">
+			<Name>fillInHelp</Name>
+			<Description>Fill in Help</Description>
+			<Type>fixed</Type>
+			<Interprete>
+				<RawType>other</RawType>
+				<LengthType>next param</LengthType>
+				<Type>string</Type>
+			</Interprete>
+		</Param>
+		<Param id="20">
+			<Name>sendCommandAButton</Name>
+			<Description></Description>
+			<Information>
+				<Subtext>Send command A.</Subtext>
+			</Information>
+			<Type>write</Type>
+			<Interprete>
+				<RawType>numeric text</RawType>
+				<Type>double</Type>
+				<LengthType>next param</LengthType>
+			</Interprete>
+			<Display>
+				<RTDisplay>true</RTDisplay>
+				<Positions>
+					<Position>
+						<Page>A - Header|Next Param|Trailer</Page>
+						<Column>0</Column>
+						<Row>0</Row>
+					</Position>
+				</Positions>
+			</Display>
+			<Measurement>
+				<Type width="110">button</Type>
+				<Discreets>
+					<Discreet>
+						<Display>Send</Display>
+						<Value>1</Value>
+					</Discreet>
+				</Discreets>
+			</Measurement>
+		</Param>
+		<Param id="21">
+			<Name>sendCommandBButton</Name>
+			<Description></Description>
+			<Information>
+				<Subtext>Send command B.</Subtext>
+			</Information>
+			<Type>write</Type>
+			<Interprete>
+				<RawType>numeric text</RawType>
+				<Type>double</Type>
+				<LengthType>next param</LengthType>
+			</Interprete>
+			<Display>
+				<RTDisplay>true</RTDisplay>
+				<Positions>
+					<Position>
+						<Page>B - Fixed Length|Fixed Length|Fixed Length</Page>
+						<Column>0</Column>
+						<Row>0</Row>
+					</Position>
+				</Positions>
+			</Display>
+			<Measurement>
+				<Type width="110">button</Type>
+				<Discreets>
+					<Discreet>
+						<Display>Send</Display>
+						<Value>1</Value>
+					</Discreet>
+				</Discreets>
+			</Measurement>
+		</Param>
+		<Param id="22">
+			<Name>sendCommandCButton</Name>
+			<Description></Description>
+			<Information>
+				<Subtext>Send command C.</Subtext>
+			</Information>
+			<Type>write</Type>
+			<Interprete>
+				<RawType>numeric text</RawType>
+				<Type>double</Type>
+				<LengthType>next param</LengthType>
+			</Interprete>
+			<Display>
+				<RTDisplay>true</RTDisplay>
+				<Positions>
+					<Position>
+						<Page>C - Fixed Length|Next Param|Fixed Length|Length|Next Param</Page>
+						<Column>0</Column>
+						<Row>0</Row>
+					</Position>
+				</Positions>
+			</Display>
+			<Measurement>
+				<Type width="110">button</Type>
+				<Discreets>
+					<Discreet>
+						<Display>Send</Display>
+						<Value>1</Value>
+					</Discreet>
+				</Discreets>
+			</Measurement>
+		</Param>
+		<Param id="23">
+			<Name>sendCommandDButton</Name>
+			<Description></Description>
+			<Information>
+				<Subtext>Send command D.</Subtext>
+			</Information>
+			<Type>write</Type>
+			<Interprete>
+				<RawType>numeric text</RawType>
+				<Type>double</Type>
+				<LengthType>next param</LengthType>
+			</Interprete>
+			<Display>
+				<RTDisplay>true</RTDisplay>
+				<Positions>
+					<Position>
+						<Page>D - Header|Length|Next Param|Trailer</Page>
+						<Column>0</Column>
+						<Row>0</Row>
+					</Position>
+				</Positions>
+			</Display>
+			<Measurement>
+				<Type width="110">button</Type>
+				<Discreets>
+					<Discreet>
+						<Display>Send</Display>
+						<Value>1</Value>
+					</Discreet>
+				</Discreets>
+			</Measurement>
+		</Param>
+		<Param id="24">
+			<Name>sendCommandEButton</Name>
+			<Description></Description>
+			<Information>
+				<Subtext>Send command E.</Subtext>
+			</Information>
+			<Type>write</Type>
+			<Interprete>
+				<RawType>numeric text</RawType>
+				<Type>double</Type>
+				<LengthType>next param</LengthType>
+			</Interprete>
+			<Display>
+				<RTDisplay>true</RTDisplay>
+				<Positions>
+					<Position>
+						<Page>E - Fixed Length|Next Param|Fixed Length|Fixed Length|Other Param</Page>
+						<Column>0</Column>
+						<Row>0</Row>
+					</Position>
+				</Positions>
+			</Display>
+			<Measurement>
+				<Type width="110">button</Type>
+				<Discreets>
+					<Discreet>
+						<Display>Send</Display>
+						<Value>1</Value>
+					</Discreet>
+				</Discreets>
+			</Measurement>
+		</Param>
+		<Param id="25">
+			<Name>sendCommandFButton</Name>
+			<Description></Description>
+			<Information>
+				<Subtext>Send command F.</Subtext>
+			</Information>
+			<Type>write</Type>
+			<Interprete>
+				<RawType>numeric text</RawType>
+				<Type>double</Type>
+				<LengthType>next param</LengthType>
+			</Interprete>
+			<Display>
+				<RTDisplay>true</RTDisplay>
+				<Positions>
+					<!-- SuppressValidator 2.22.6 small casing to match actual feature -->
+					<Position>
+						<Page>F - Fixed Length|Length ("next param")|Fixed Length|Next Param</Page>
+						<Column>0</Column>
+						<Row>0</Row>
+					</Position>
+					<!-- /SuppressValidator 2.22.6 -->
+				</Positions>
+			</Display>
+			<Measurement>
+				<Type width="110">button</Type>
+				<Discreets>
+					<Discreet>
+						<Display>Send</Display>
+						<Value>1</Value>
+					</Discreet>
+				</Discreets>
+			</Measurement>
+		</Param>
+		<!-- Command A will result in a response being sent that consists of a fixed header and trailer. -->
+		<Param id="50">
+			<Name>commandA</Name>
+			<Description>Command A</Description>
+			<Type>fixed</Type>
+			<Interprete>
+				<RawType>other</RawType>
+				<LengthType>fixed</LengthType>
+				<Length>9</Length>
+				<Type>string</Type>
+				<Value>COMMAND_A</Value>
+			</Interprete>
+		</Param>
+		<!-- Command B will result in a response being sent that consists of fixed length parameters. -->
+		<Param id="51">
+			<Name>commandB</Name>
+			<Description>Command B</Description>
+			<Type>fixed</Type>
+			<Interprete>
+				<RawType>other</RawType>
+				<LengthType>fixed</LengthType>
+				<Length>9</Length>
+				<Type>string</Type>
+				<Value>COMMAND_B</Value>
+			</Interprete>
+		</Param>
+		<!-- Command C will result in a response being sent that consists of a length byte at a fixed position linked to variable amount of data at the end. -->
+		<Param id="52">
+			<Name>commandC</Name>
+			<Description>Command C</Description>
+			<Type>fixed</Type>
+			<Interprete>
+				<RawType>other</RawType>
+				<LengthType>fixed</LengthType>
+				<Length>9</Length>
+				<Type>string</Type>
+				<Value>COMMAND_C</Value>
+			</Interprete>
+		</Param>
+		<!-- Command D will result in a response being sent that has a field that indicates the length, directly followed by variable length data.(no header/trailer) -->
+		<Param id="53">
+			<Name>commandD</Name>
+			<Description>Command D</Description>
+			<Type>fixed</Type>
+			<Interprete>
+				<RawType>other</RawType>
+				<LengthType>fixed</LengthType>
+				<Length>9</Length>
+				<Type>string</Type>
+				<Value>COMMAND_D</Value>
+			</Interprete>
+		</Param>
+		<!-- Command E will result in a response being sent that consists of a length byte at a variable position but with fixed set size, linked to variable amount of data at the end. -->
+		<Param id="54">
+			<Name>commandE</Name>
+			<Description>Command E</Description>
+			<Type>fixed</Type>
+			<Interprete>
+				<RawType>other</RawType>
+				<LengthType>fixed</LengthType>
+				<Length>9</Length>
+				<Type>string</Type>
+				<Value>COMMAND_E</Value>
+			</Interprete>
+		</Param>
+		<!-- Command F will result in a response being sent that consists of a length field with variable length but followed by a fixed parameter. This is supported since DataMiner 10.0.3 (RN 24442). -->
+		<Param id="55">
+			<Name>commandF</Name>
+			<Description>Command F</Description>
+			<Type>fixed</Type>
+			<Interprete>
+				<RawType>other</RawType>
+				<LengthType>fixed</LengthType>
+				<Length>9</Length>
+				<Type>string</Type>
+				<Value>COMMAND_F</Value>
+			</Interprete>
+		</Param>
+		<!-- Parameters for matching response A using header and trailer. -->
+		<Param id="100">
+			<Name>responseAHeader</Name>
+			<Description>Response A Header</Description>
+			<Type>header</Type>
+			<Interprete>
+				<RawType>other</RawType>
+				<LengthType>fixed</LengthType>
+				<Length>7</Length>
+				<Type>string</Type>
+				<Value>[START]</Value>
+			</Interprete>
+		</Param>
+		<Param id="101" trending="false">
+			<Name>responseAData</Name>
+			<Description>Response A Data</Description>
+			<Information>
+				<Subtext>The received data from response A between the header and the trailer.</Subtext>
+			</Information>
+			<Type>read</Type>
+			<Interprete>
+				<RawType>other</RawType>
+				<Type>string</Type>
+				<LengthType>next param</LengthType>
+			</Interprete>
+			<Display>
+				<RTDisplay>true</RTDisplay>
+				<Positions>
+					<Position>
+						<Page>A - Header|Next Param|Trailer</Page>
+						<Column>1</Column>
+						<Row>0</Row>
+					</Position>
+				</Positions>
+			</Display>
+			<Measurement>
+				<Type>string</Type>
+			</Measurement>
+		</Param>
+		<Param id="102">
+			<Name>responseATrailer</Name>
+			<Description>Response A Trailer</Description>
+			<Type>trailer</Type>
+			<Interprete>
+				<RawType>other</RawType>
+				<LengthType>fixed</LengthType>
+				<Length>5</Length>
+				<Type>string</Type>
+				<Value>[END]</Value>
+			</Interprete>
+		</Param>
+		<!-- Parameters for response B using all fixed length parameters-->
+		<Param id="200" trending="false">
+			<Name>responseBKeyField</Name>
+			<!-- SuppressValidator 2.14.7 Character should remain capital case for clarity. -->
+			<Description>ResponseB Key Field</Description>
+			<!-- /SuppressValidator 2.14.7 -->
+			<Information>
+				<Subtext>ResponseB field.</Subtext>
+			</Information>
+			<Type>read</Type>
+			<Interprete>
+				<RawType>other</RawType>
+				<Type>string</Type>
+				<LengthType>fixed</LengthType>
+				<Length>9</Length>
+			</Interprete>
+			<Display>
+				<RTDisplay>true</RTDisplay>
+				<Positions>
+					<Position>
+						<Page>B - Fixed Length|Fixed Length|Fixed Length</Page>
+						<Column>1</Column>
+						<Row>0</Row>
+					</Position>
+				</Positions>
+			</Display>
+			<Measurement>
+				<Type>string</Type>
+			</Measurement>
+		</Param>
+		<Param id="201">
+			<Name>responseBFixedColon</Name>
+			<Description>ResponseB Fixed Colon (:)</Description>
+			<Type>fixed</Type>
+			<Interprete>
+				<RawType>other</RawType>
+				<LengthType>fixed</LengthType>
+				<Length>1</Length>
+				<Type>string</Type>
+				<Value>:</Value>
+			</Interprete>
+		</Param>
+		<Param id="202" trending="false">
+			<Name>ResponseBValueField</Name>
+			<!-- SuppressValidator 2.14.7 Character should remain capital case for clarity. -->
+			<Description>ResponseB Value Field</Description>
+			<!-- /SuppressValidator 2.14.7 -->
+			<Information>
+				<Subtext>Response field.</Subtext>
+			</Information>
+			<Type>read</Type>
+			<Interprete>
+				<RawType>other</RawType>
+				<Type>string</Type>
+				<LengthType>fixed</LengthType>
+				<Length>6</Length>
+			</Interprete>
+			<Display>
+				<RTDisplay>true</RTDisplay>
+				<Positions>
+					<Position>
+						<Page>B - Fixed Length|Fixed Length|Fixed Length</Page>
+						<Column>1</Column>
+						<Row>1</Row>
+					</Position>
+				</Positions>
+			</Display>
+			<Measurement>
+				<Type>string</Type>
+			</Measurement>
+		</Param>
+		<!-- Parameters for response C, containing length parameter at fixed position and fixed length byte length-->
+		<Param id="300" trending="false">
+			<Name>responseCKeyField</Name>
+			<!-- SuppressValidator 2.14.7 Character should remain capital case for clarity. -->
+			<Description>ResponseC Key Field</Description>
+			<!-- /SuppressValidator 2.14.7 -->
+			<Information>
+				<Subtext>ResponseC field.</Subtext>
+			</Information>
+			<Type>read</Type>
+			<Interprete>
+				<RawType>other</RawType>
+				<Type>string</Type>
+				<LengthType>fixed</LengthType>
+				<Length>9</Length>
+			</Interprete>
+			<Display>
+				<RTDisplay>true</RTDisplay>
+				<Positions>
+					<Position>
+						<Page>C - Fixed Length|Next Param|Fixed Length|Length|Next Param</Page>
+						<Column>1</Column>
+						<Row>0</Row>
+					</Position>
+				</Positions>
+			</Display>
+			<Measurement>
+				<Type>string</Type>
+			</Measurement>
+		</Param>
+		<Param id="301">
+			<Name>responseCVariableData</Name>
+			<Description>responseC Variable Data</Description>
+			<Type>read</Type>
+			<Interprete>
+				<RawType>other</RawType>
+				<LengthType>next param</LengthType>
+				<Type>string</Type>
+			</Interprete>
+		</Param>
+		<Param id="302">
+			<Name>responseCFixedColon</Name>
+			<Description>ResponseC Fixed Colon (:)</Description>
+			<Type>fixed</Type>
+			<Interprete>
+				<RawType>other</RawType>
+				<LengthType>fixed</LengthType>
+				<Length>1</Length>
+				<Type>string</Type>
+				<Value>:</Value>
+			</Interprete>
+		</Param>
+		<Param id="303" trending="false">
+			<Name>ResponseCLengthField</Name>
+			<!-- SuppressValidator 2.14.7 Character should remain capital case for clarity. -->
+			<Description>ResponseC Length Field</Description>
+			<!-- /SuppressValidator 2.14.7 -->
+			<Information>
+				<Subtext>ResponseC Length field.</Subtext>
+			</Information>
+			<Type>length</Type>
+			<Interprete>
+				<RawType>numeric text</RawType>
+				<LengthType>fixed</LengthType>
+				<Length>2</Length>
+				<Type>double</Type>
+			</Interprete>
+			<Length>
+				<Content>
+					<Param>4</Param>
+				</Content>
+			</Length>
+			<!-- SuppressValidator 2.11.1 Range not applicable -->
+			<!-- SuppressValidator 2.9.7 Unit not applicable -->
+			<Display>
+				<!-- /SuppressValidator 2.9.7 -->
+				<!-- /SuppressValidator 2.11.1 -->
+				<RTDisplay>true</RTDisplay>
+				<Positions>
+					<Position>
+						<Page>C - Fixed Length|Next Param|Fixed Length|Length|Next Param</Page>
+						<Column>1</Column>
+						<Row>1</Row>
+					</Position>
+				</Positions>
+			</Display>
+			<Measurement>
+				<Type>number</Type>
+			</Measurement>
+		</Param>
+		<Param id="304" trending="false">
+			<Name>responseCVariableLengthDataField</Name>
+			<!-- SuppressValidator 2.14.7 Character should remain capital case for clarity. -->
+			<Description>ResponseC Variable Length Data Field</Description>
+			<!-- /SuppressValidator 2.14.7 -->
+			<Type>read</Type>
+			<Information>
+				<Subtext>Variable length data field.</Subtext>
+			</Information>
+			<Interprete>
+				<RawType>other</RawType>
+				<LengthType>next param</LengthType>
+				<Type>string</Type>
+			</Interprete>
+			<Display>
+				<RTDisplay>true</RTDisplay>
+				<Positions>
+					<Position>
+						<Page>C - Fixed Length|Next Param|Fixed Length|Length|Next Param</Page>
+						<Column>1</Column>
+						<Row>2</Row>
+					</Position>
+				</Positions>
+			</Display>
+			<Measurement>
+				<Type>string</Type>
+			</Measurement>
+		</Param>
+		<!-- Parameters for response F -->
+		<Param id="400">
+			<Name>responseDHeader</Name>
+			<Description>Response D Header</Description>
+			<Type>header</Type>
+			<Interprete>
+				<RawType>other</RawType>
+				<LengthType>fixed</LengthType>
+				<Length>7</Length>
+				<Type>string</Type>
+				<Value>[START]</Value>
+			</Interprete>
+		</Param>
+		<Param id="401" trending="false">
+			<Name>responseDLengthField</Name>
+			<!-- SuppressValidator 2.14.7 Character should remain capital case for clarity. -->
+			<Description>ResponseD Length Field</Description>
+			<!-- /SuppressValidator 2.14.7 -->
+			<Type>length</Type>
+			<Information>
+				<Subtext>Length field.</Subtext>
+			</Information>
+			<Interprete>
+				<RawType>numeric text</RawType>
+				<LengthType>fixed</LengthType>
+				<Length>2</Length>
+				<Type>double</Type>
+			</Interprete>
+			<!-- SuppressValidator 2.11.1 Suppressed. -->
+			<!-- SuppressValidator 2.9.7 Suppressed. -->
+			<Display>
+				<!-- /SuppressValidator 2.9.7 -->
+				<!-- /SuppressValidator 2.11.1 -->
+				<RTDisplay>true</RTDisplay>
+				<Positions>
+					<Position>
+						<Page>D - Header|Length|Next Param|Trailer</Page>
+						<Column>1</Column>
+						<Row>0</Row>
+					</Position>
+				</Positions>
+			</Display>
+			<Length>
+				<Content>
+					<Param>2</Param>
+				</Content>
+			</Length>
+			<Measurement>
+				<Type>number</Type>
+			</Measurement>
+		</Param>
+		<Param id="402" trending="false">
+			<Name>responseDVariableLengthDataField</Name>
+			<!-- SuppressValidator 2.14.7 Character should remain capital case for clarity. -->
+			<Description>ResponseD Variable Length Data Field</Description>
+			<!-- /SuppressValidator 2.14.7 -->
+			<Type>read</Type>
+			<Information>
+				<Subtext>Variable length data field.</Subtext>
+			</Information>
+			<Interprete>
+				<RawType>other</RawType>
+				<LengthType>next param</LengthType>
+				<Type>string</Type>
+			</Interprete>
+			<Display>
+				<RTDisplay>true</RTDisplay>
+				<Positions>
+					<Position>
+						<Page>D - Header|Length|Next Param|Trailer</Page>
+						<Column>1</Column>
+						<Row>1</Row>
+					</Position>
+				</Positions>
+			</Display>
+			<Measurement>
+				<Type>string</Type>
+			</Measurement>
+		</Param>
+		<Param id="403">
+			<Name>responseDTrailer</Name>
+			<Description>ResponseD Trailer</Description>
+			<Type>trailer</Type>
+			<Interprete>
+				<RawType>other</RawType>
+				<LengthType>fixed</LengthType>
+				<Length>5</Length>
+				<Type>string</Type>
+				<Value>[END]</Value>
+			</Interprete>
+		</Param>
+		<Param id="500" trending="false">
+			<Name>responseEKeyField</Name>
+			<!-- SuppressValidator 2.14.7 Character should remain capital case for clarity. -->
+			<Description>ResponseE Key Field</Description>
+			<!-- /SuppressValidator 2.14.7 -->
+			<Information>
+				<Subtext>ResponseE field.</Subtext>
+			</Information>
+			<Type>read</Type>
+			<Interprete>
+				<RawType>other</RawType>
+				<Type>string</Type>
+				<LengthType>fixed</LengthType>
+				<Length>9</Length>
+			</Interprete>
+			<Display>
+				<RTDisplay>true</RTDisplay>
+				<Positions>
+					<Position>
+						<Page>E - Fixed Length|Next Param|Fixed Length|Fixed Length|Other Param</Page>
+						<Column>1</Column>
+						<Row>0</Row>
+					</Position>
+				</Positions>
+			</Display>
+			<Measurement>
+				<Type>string</Type>
+			</Measurement>
+		</Param>
+		<Param id="501">
+			<Name>responseEVariableData</Name>
+			<Description>responseE Variable Data</Description>
+			<Type>read</Type>
+			<Interprete>
+				<RawType>other</RawType>
+				<LengthType>next param</LengthType>
+				<Type>string</Type>
+			</Interprete>
+		</Param>
+		<Param id="502">
+			<Name>responseEFixedColon</Name>
+			<Description>ResponseE Fixed Colon (:)</Description>
+			<Type>fixed</Type>
+			<Interprete>
+				<RawType>other</RawType>
+				<LengthType>fixed</LengthType>
+				<Length>1</Length>
+				<Type>string</Type>
+				<Value>:</Value>
+			</Interprete>
+		</Param>
+		<Param id="503" trending="false">
+			<Name>ResponseELengthField</Name>
+			<!-- SuppressValidator 2.14.7 Character should remain capital case for clarity. -->
+			<Description>ResponseE Length Field</Description>
+			<!-- /SuppressValidator 2.14.7 -->
+			<Information>
+				<Subtext>ResponseE Length field.</Subtext>
+			</Information>
+			<Type>read</Type>
+			<Interprete>
+				<RawType>numeric text</RawType>
+				<LengthType>fixed</LengthType>
+				<Length>2</Length>
+				<Type>double</Type>
+			</Interprete>
+			<!-- SuppressValidator 2.11.1 range not applicable -->
+			<!-- SuppressValidator 2.9.7 Unit not applicable -->
+			<Display>
+				<!-- /SuppressValidator 2.9.7 -->
+				<!-- /SuppressValidator 2.11.1 -->
+				<RTDisplay>true</RTDisplay>
+				<Positions>
+					<Position>
+						<Page>E - Fixed Length|Next Param|Fixed Length|Fixed Length|Other Param</Page>
+						<Column>1</Column>
+						<Row>1</Row>
+					</Position>
+				</Positions>
+			</Display>
+			<Measurement>
+				<Type>number</Type>
+			</Measurement>
+		</Param>
+		<Param id="504" trending="false">
+			<Name>responseEVariableLengthDataField</Name>
+			<!-- SuppressValidator 2.14.7 Character should remain capital case for clarity. -->
+			<Description>ResponseE Variable Length Data Field</Description>
+			<!-- /SuppressValidator 2.14.7 -->
+			<Type>read</Type>
+			<Information>
+				<Subtext>Variable length data field.</Subtext>
+			</Information>
+			<Interprete>
+				<RawType>other</RawType>
+				<LengthType id="503">other param</LengthType>
+				<Type>string</Type>
+			</Interprete>
+			<Display>
+				<RTDisplay>true</RTDisplay>
+				<Positions>
+					<Position>
+						<Page>E - Fixed Length|Next Param|Fixed Length|Fixed Length|Other Param</Page>
+						<Column>1</Column>
+						<Row>2</Row>
+					</Position>
+				</Positions>
+			</Display>
+			<Measurement>
+				<Type>string</Type>
+			</Measurement>
+		</Param>
+		<!-- Parameters for response F, containing variable length field.-->
+		<Param id="600" trending="false">
+			<Name>responseFKeyField</Name>
+			<Description>ResponseF Key Field</Description>
+			<Type>header</Type>
+			<Interprete>
+				<RawType>other</RawType>
+				<Type>string</Type>
+				<LengthType>fixed</LengthType>
+				<Length>7</Length>
+				<Value>getData</Value>
+			</Interprete>
+		</Param>
+		<!-- SuppressValidator 2.4.1 Not applicable -->
+		<Param id="601" trending="false">
+			<Name>ResponseFLengthField</Name>
+			<!-- SuppressValidator 2.14.7 Character should remain capital case for clarity. -->
+			<Description>ResponseF Length Field</Description>
+			<!-- /SuppressValidator 2.14.7 -->
+			<Type>length</Type>
+			<Interprete>
+				<RawType>numeric text</RawType>
+				<Type>double</Type>
+				<LengthType>next param</LengthType>
+			</Interprete>
+			<Length>
+				<Content>
+					<Param>4</Param>
+				</Content>
+			</Length>
+			<!-- SuppressValidator 2.11.1 Range not applicable -->
+			<!-- SuppressValidator 2.9.7 Unit not applicable -->
+			<Display>
+				<!-- /SuppressValidator 2.9.7 -->
+				<!-- /SuppressValidator 2.11.1 -->
+				<RTDisplay>true</RTDisplay>
+				<Positions>
+					<!-- SuppressValidator 2.22.6 small casing to match actual feature -->
+					<Position>
+						<Page>F - Fixed Length|Length ("next param")|Fixed Length|Next Param</Page>
+						<Column>1</Column>
+						<Row>0</Row>
+					</Position>
+					<!-- /SuppressValidator 2.22.6 -->
+				</Positions>
+			</Display>
+			<Measurement>
+				<Type>number</Type>
+			</Measurement>
+		</Param>
+		<!-- /SuppressValidator 2.4.1 -->
+		<Param id="602">
+			<Name>responseFFixedColon</Name>
+			<Description>ResponseF Fixed Colon (:)</Description>
+			<Type>trailer</Type>
+			<Interprete>
+				<RawType>other</RawType>
+				<Type>string</Type>
+				<LengthType>fixed</LengthType>
+				<Length>1</Length>
+				<Value>:</Value>
+			</Interprete>
+		</Param>
+		<Param id="603" trending="false">
+			<Name>responseFVariableLengthDataField</Name>
+			<!-- SuppressValidator 2.14.7 Character should remain capital case for clarity. -->
+			<Description>ResponseF Variable Length Data Field</Description>
+			<!-- /SuppressValidator 2.14.7 -->
+			<Type>read</Type>
+			<Information>
+				<Subtext>Variable length data field.</Subtext>
+			</Information>
+			<Interprete>
+				<RawType>other</RawType>
+				<Type>string</Type>
+				<LengthType id="601">other param</LengthType>
+				<!--<LengthType>next param</LengthType>-->
+			</Interprete>
+			<Display>
+				<RTDisplay>true</RTDisplay>
+				<Positions>
+					<!-- SuppressValidator 2.22.6 small casing to match actual feature -->
+					<Position>
+						<Page>F - Fixed Length|Length ("next param")|Fixed Length|Next Param</Page>
+						<Column>1</Column>
+						<Row>1</Row>
+					</Position>
+					<!-- /SuppressValidator 2.22.6 -->
+				</Positions>
+			</Display>
+			<Measurement>
+				<Type>string</Type>
+			</Measurement>
+		</Param>
+		<Param id="610">
+			<Name>responseFFixedDash</Name>
+			<Description>ResponseF Fixed Dash (;)</Description>
+			<Type>fixed</Type>
+			<Interprete>
+				<RawType>other</RawType>
+				<Type>string</Type>
+				<LengthType>fixed</LengthType>
+				<Length>1</Length>
+				<Value>;</Value>
+			</Interprete>
+		</Param>
+		<Param id="5000" trending="false">
+			<Name>commandAStartTime</Name>
+			<Description>CommandA Start Time</Description>
+			<Information>
+			</Information>
+			<Type>read</Type>
+			<Interprete>
+				<RawType>numeric text</RawType>
+				<Type>double</Type>
+				<LengthType>next param</LengthType>
+				<Decimals>8</Decimals>
+			</Interprete>
+			<Display>
+				<RTDisplay>false</RTDisplay>
+			</Display>
+			<Measurement>
+				<Type options="datetime">number</Type>
+			</Measurement>
+		</Param>
+		<Param id="5001" trending="false">
+			<Name>commandBStartTime</Name>
+			<Description>CommandB Start Time</Description>
+			<Information>
+			</Information>
+			<Type>read</Type>
+			<Interprete>
+				<RawType>numeric text</RawType>
+				<Type>double</Type>
+				<LengthType>next param</LengthType>
+				<Decimals>8</Decimals>
+			</Interprete>
+			<Display>
+				<RTDisplay>false</RTDisplay>
+				<Units>ms</Units>
+			</Display>
+			<Measurement>
+				<Type options="datetime">number</Type>
+			</Measurement>
+		</Param>
+		<Param id="5002" trending="false">
+			<Name>commandCStartTime</Name>
+			<Description>CommandC Start Time</Description>
+			<Information>
+			</Information>
+			<Type>read</Type>
+			<Interprete>
+				<RawType>numeric text</RawType>
+				<Type>double</Type>
+				<LengthType>next param</LengthType>
+				<Decimals>8</Decimals>
+			</Interprete>
+			<Display>
+				<RTDisplay>false</RTDisplay>
+			</Display>
+			<Measurement>
+				<Type options="datetime">number</Type>
+			</Measurement>
+		</Param>
+		<Param id="5003" trending="false">
+			<Name>commandDStartTime</Name>
+			<Description>CommandD Start Time</Description>
+			<Information>
+			</Information>
+			<Type>read</Type>
+			<Interprete>
+				<RawType>numeric text</RawType>
+				<Type>double</Type>
+				<LengthType>next param</LengthType>
+				<Decimals>8</Decimals>
+			</Interprete>
+			<Display>
+				<RTDisplay>false</RTDisplay>
+			</Display>
+			<Measurement>
+				<Type options="datetime">number</Type>
+			</Measurement>
+		</Param>
+		<Param id="5004" trending="false">
+			<Name>commandEStartTime</Name>
+			<Description>CommandE Start Time</Description>
+			<Information>
+			</Information>
+			<Type>read</Type>
+			<Interprete>
+				<RawType>numeric text</RawType>
+				<Type>double</Type>
+				<LengthType>next param</LengthType>
+				<Decimals>8</Decimals>
+			</Interprete>
+			<Display>
+				<RTDisplay>false</RTDisplay>
+			</Display>
+			<Measurement>
+				<Type options="datetime">number</Type>
+			</Measurement>
+		</Param>
+		<Param id="5005" trending="false">
+			<Name>commandFStartTime</Name>
+			<Description>CommandF Start Time</Description>
+			<Information>
+			</Information>
+			<Type>read</Type>
+			<Interprete>
+				<RawType>numeric text</RawType>
+				<Type>double</Type>
+				<LengthType>next param</LengthType>
+				<Decimals>8</Decimals>
+			</Interprete>
+			<Display>
+				<RTDisplay>false</RTDisplay>
+			</Display>
+			<Measurement>
+				<Type options="datetime">number</Type>
+			</Measurement>
+		</Param>
+		<Param id="5100" trending="false">
+			<Name>responseAMatchingDuration</Name>
+			<!-- SuppressValidator 2.14.7 Character should remain capital case for clarity. -->
+			<Description>ResponseA Match Duration</Description>
+			<!-- /SuppressValidator 2.14.7 -->
+			<Information>
+				<Subtext>Response matching duration.</Subtext>
+			</Information>
+			<Type>read</Type>
+			<Interprete>
+				<RawType>numeric text</RawType>
+				<Type>double</Type>
+				<LengthType>next param</LengthType>
+			</Interprete>
+			<Display>
+				<RTDisplay>true</RTDisplay>
+				<Units>ms</Units>
+				<Positions>
+					<Position>
+						<Page>A - Header|Next Param|Trailer</Page>
+						<Column>0</Column>
+						<Row>1</Row>
+					</Position>
+				</Positions>
+				<Range>
+					<Low>0</Low>
+				</Range>
+			</Display>
+			<Measurement>
+				<Type>number</Type>
+			</Measurement>
+		</Param>
+		<Param id="5101" trending="false">
+			<Name>responseBMatchingDuration</Name>
+			<!-- SuppressValidator 2.14.7 Character should remain capital case for clarity. -->
+			<Description>ResponseB Match Duration</Description>
+			<!-- /SuppressValidator 2.14.7 -->
+			<Information>
+				<Subtext>Response matching duration.</Subtext>
+			</Information>
+			<Type>read</Type>
+			<Interprete>
+				<RawType>numeric text</RawType>
+				<Type>double</Type>
+				<LengthType>next param</LengthType>
+			</Interprete>
+			<Display>
+				<RTDisplay>true</RTDisplay>
+				<Units>ms</Units>
+				<Positions>
+					<Position>
+						<Page>B - Fixed Length|Fixed Length|Fixed Length</Page>
+						<Column>0</Column>
+						<Row>1</Row>
+					</Position>
+				</Positions>
+				<Range>
+					<Low>0</Low>
+				</Range>
+			</Display>
+			<Measurement>
+				<Type>number</Type>
+			</Measurement>
+		</Param>
+		<Param id="5102" trending="false">
+			<Name>responseCMatchingDuration</Name>
+			<!-- SuppressValidator 2.14.7 Character should remain capital case for clarity. -->
+			<Description>ResponseC Match Duration</Description>
+			<!-- /SuppressValidator 2.14.7 -->
+			<Information>
+				<Subtext>Response matching duration.</Subtext>
+			</Information>
+			<Type>read</Type>
+			<Interprete>
+				<RawType>numeric text</RawType>
+				<Type>double</Type>
+				<LengthType>next param</LengthType>
+			</Interprete>
+			<Display>
+				<RTDisplay>true</RTDisplay>
+				<Units>ms</Units>
+				<Positions>
+					<Position>
+						<Page>C - Fixed Length|Next Param|Fixed Length|Length|Next Param</Page>
+						<Column>0</Column>
+						<Row>1</Row>
+					</Position>
+				</Positions>
+				<Range>
+					<Low>0</Low>
+				</Range>
+			</Display>
+			<Measurement>
+				<Type>number</Type>
+			</Measurement>
+		</Param>
+		<Param id="5103" trending="false">
+			<Name>responseDMatchingDuration</Name>
+			<!-- SuppressValidator 2.14.7 Character should remain capital case for clarity. -->
+			<Description>ResponseD Match Duration</Description>
+			<!-- /SuppressValidator 2.14.7 -->
+			<Information>
+				<Subtext>Response matching duration.</Subtext>
+			</Information>
+			<Type>read</Type>
+			<Interprete>
+				<RawType>numeric text</RawType>
+				<Type>double</Type>
+				<LengthType>next param</LengthType>
+			</Interprete>
+			<Display>
+				<RTDisplay>true</RTDisplay>
+				<Units>ms</Units>
+				<Positions>
+					<Position>
+						<Page>D - Header|Length|Next Param|Trailer</Page>
+						<Column>0</Column>
+						<Row>1</Row>
+					</Position>
+				</Positions>
+				<Range>
+					<Low>0</Low>
+				</Range>
+			</Display>
+			<Measurement>
+				<Type>number</Type>
+			</Measurement>
+		</Param>
+		<Param id="5104" trending="false">
+			<Name>responseEMatchingDuration</Name>
+			<!-- SuppressValidator 2.14.7 Character should remain capital case for clarity. -->
+			<Description>ResponseE Match Duration</Description>
+			<!-- /SuppressValidator 2.14.7 -->
+			<Information>
+				<Subtext>Response matching duration.</Subtext>
+			</Information>
+			<Type>read</Type>
+			<Interprete>
+				<RawType>numeric text</RawType>
+				<Type>double</Type>
+				<LengthType>next param</LengthType>
+			</Interprete>
+			<Display>
+				<RTDisplay>true</RTDisplay>
+				<Units>ms</Units>
+				<Positions>
+					<Position>
+						<Page>E - Fixed Length|Next Param|Fixed Length|Fixed Length|Other Param</Page>
+						<Column>0</Column>
+						<Row>1</Row>
+					</Position>
+				</Positions>
+				<Range>
+					<Low>0</Low>
+				</Range>
+			</Display>
+			<Measurement>
+				<Type>number</Type>
+			</Measurement>
+		</Param>
+		<Param id="5105" trending="false">
+			<Name>responseFMatchingDuration</Name>
+			<!-- SuppressValidator 2.14.7 Character should remain capital case for clarity. -->
+			<Description>ResponseF Match Duration</Description>
+			<!-- /SuppressValidator 2.14.7 -->
+			<Information>
+				<Subtext>Response matching duration.</Subtext>
+			</Information>
+			<Type>read</Type>
+			<Interprete>
+				<RawType>numeric text</RawType>
+				<Type>double</Type>
+				<LengthType>next param</LengthType>
+			</Interprete>
+			<Display>
+				<RTDisplay>true</RTDisplay>
+				<Units>ms</Units>
+				<Positions>
+					<!-- SuppressValidator 2.22.6 small casing to match actual feature -->
+					<Position>
+						<Page>F - Fixed Length|Length ("next param")|Fixed Length|Next Param</Page>
+						<Column>0</Column>
+						<Row>1</Row>
+					</Position>
+					<!-- /SuppressValidator 2.22.6 -->
+				</Positions>
+				<Range>
+					<Low>0</Low>
+				</Range>
+			</Display>
+			<Measurement>
+				<Type>number</Type>
+			</Measurement>
+		</Param>
+		<Param id="10000">
+			<Name>AfterResponseA</Name>
+			<Description>After Response A</Description>
+			<Type>dummy</Type>
+		</Param>
+		<Param id="10001">
+			<Name>AfterResponseB</Name>
+			<Description>After Response B</Description>
+			<Type>dummy</Type>
+		</Param>
+		<Param id="10002">
+			<Name>AfterResponseC</Name>
+			<Description>After Response C</Description>
+			<Type>dummy</Type>
+		</Param>
+		<Param id="10003">
+			<Name>AfterResponseD</Name>
+			<Description>After Response D</Description>
+			<Type>dummy</Type>
+		</Param>
+		<Param id="10004">
+			<Name>AfterResponseE</Name>
+			<Description>After Response E</Description>
+			<Type>dummy</Type>
+		</Param>
+		<Param id="10005">
+			<Name>AfterResponseF</Name>
+			<Description>After Response F</Description>
+			<Type>dummy</Type>
+		</Param>
+	</Params>
+	<QActions>
+		<QAction id="20" name="SendCommandA" encoding="csharp" triggers="20">
+			
+		</QAction>
+		<QAction id="21" name="SendCommandB" encoding="csharp" triggers="21">
+			
+		</QAction>
+		<QAction id="22" name="SendCommandC" encoding="csharp" triggers="22">
+			
+		</QAction>
+		<QAction id="23" name="SendCommandD" encoding="csharp" triggers="23">
+			
+		</QAction>
+		<QAction id="24" name="SendCommandE" encoding="csharp" triggers="24">
+			
+		</QAction>
+		<QAction id="25" name="SendCommandF" encoding="csharp" triggers="25">
+			
+		</QAction>
+		<QAction id="1000" name="Process Response A" encoding="csharp" triggers="10000">
+			
+		</QAction>
+		<QAction id="1001" name="Process Response B" encoding="csharp" triggers="10001">
+			
+		</QAction>
+		<QAction id="1002" name="Process Response C" encoding="csharp" triggers="10002">
+			
+		</QAction>
+		<QAction id="1003" name="Process Response D" encoding="csharp" triggers="10003">
+			
+		</QAction>
+		<QAction id="1004" name="Process Response E" encoding="csharp" triggers="10004">
+			
+		</QAction>
+		<QAction id="1005" name="Process Response F" encoding="csharp" triggers="10005">
+			
+		</QAction>
+	</QActions>
+	<Commands>
+		<Command id="100">
+			<Name>commandA</Name>
+			<Description>Command A</Description>
+			<Content>
+				<Param>50</Param>
+			</Content>
+		</Command>
+		<Command id="200">
+			<Name>commandB</Name>
+			<Description>Command B</Description>
+			<Content>
+				<Param>51</Param>
+			</Content>
+		</Command>
+		<Command id="300">
+			<Name>commandC</Name>
+			<Description>Command C</Description>
+			<Content>
+				<Param>52</Param>
+			</Content>
+		</Command>
+		<Command id="400">
+			<Name>commandD</Name>
+			<Description>Command D</Description>
+			<Content>
+				<Param>53</Param>
+			</Content>
+		</Command>
+		<Command id="500">
+			<Name>commandE</Name>
+			<Description>Command E</Description>
+			<Content>
+				<Param>54</Param>
+			</Content>
+		</Command>
+		<Command id="600">
+			<Name>commandF</Name>
+			<Description>Command F</Description>
+			<Content>
+				<Param>55</Param>
+			</Content>
+		</Command>
+	</Commands>
+	<Responses>
+		<Response id="100">
+			<Name>responseAWithHeaderAndTrailer</Name>
+			<Description>ResponseA with Header and Trailer</Description>
+			<Content>
+				<Param>100</Param>
+				<Param>101</Param>
+				<Param>102</Param>
+			</Content>
+		</Response>
+		<Response id="200">
+			<Name>responseBWithFixedLengthParametersOnly</Name>
+			<Description>ResponseB With Fixed Length Parameters Only</Description>
+			<Content>
+				<Param>200</Param>
+				<Param>201</Param>
+				<Param>202</Param>
+			</Content>
+		</Response>
+		<Response id="300">
+			<Name>responseCWithLengthAndDataAtEndWithoutTrailer</Name>
+			<Description>ResponseC With Length And Data At End Without Trailer</Description>
+			<Content>
+				<Param>300</Param>
+				<Param>301</Param>
+				<Param>302</Param>
+				<Param>303</Param>
+				<Param>304</Param>
+			</Content>
+		</Response>
+		<Response id="400">
+			<Name>responseDWithLengthAndDataBetweenHeaderTrailer</Name>
+			<Description>ResponseD With Length And Data Between Header And Trailer</Description>
+			<Content>
+				<Param>400</Param>
+				<Param>401</Param>
+				<Param>402</Param>
+				<Param>403</Param>
+			</Content>
+		</Response>
+		<!-- SuppressValidator 4705 Invalid minor, there is a "other param" that has a fixed length. -->
+		<Response id="500">
+			<Name>responseEWithOtherParam</Name>
+			<Description>ResponseEWithOtherParam</Description>
+			<Content>
+				<Param>500</Param>
+				<Param>501</Param>
+				<Param>502</Param>
+				<Param>503</Param>
+				<Param>504</Param>
+			</Content>
+		</Response>
+		<!-- /SuppressValidator 4705 -->
+		<Response id="600">
+			<Name>responseFWithVariableLengthField</Name>
+			<Description>ResponseFWithVariableLengthField</Description>
+			<Content>
+				<Param>600</Param>
+				<Param>601</Param>
+				<Param>602</Param>
+				<Param>603</Param>
+			</Content>
+		</Response>
+		<Response id="601">
+			<Name>responseFWithVariableLengthField2</Name>
+			<Description>ResponseFWithVariableLengthField2</Description>
+			<Content>
+				<Param>600</Param>
+				<!--<Param>610</Param>-->
+				<Param>601</Param>
+				<Param>610</Param>
+				<Param>602</Param>
+				<Param>603</Param>
+			</Content>
+		</Response>
+	</Responses>
+	<Pairs>
+		<Pair id="100">
+			<Name>pairA</Name>
+			<Description>Pair A</Description>
+			<Content>
+				<Command>100</Command>
+				<Response>100</Response>
+			</Content>
+		</Pair>
+		<Pair id="200">
+			<Name>pairB</Name>
+			<Description>Pair B</Description>
+			<Content>
+				<Command>200</Command>
+				<Response>200</Response>
+			</Content>
+		</Pair>
+		<Pair id="300">
+			<Name>pairC</Name>
+			<Description>Pair C</Description>
+			<Content>
+				<Command>300</Command>
+				<Response>300</Response>
+			</Content>
+		</Pair>
+		<Pair id="400">
+			<Name>pairD</Name>
+			<Description>Pair D</Description>
+			<Content>
+				<Command>400</Command>
+				<Response>400</Response>
+			</Content>
+		</Pair>
+		<Pair id="500">
+			<Name>pairE</Name>
+			<Description>Pair E</Description>
+			<Content>
+				<Command>500</Command>
+				<Response>500</Response>
+			</Content>
+		</Pair>
+		<Pair id="600">
+			<Name>pairF</Name>
+			<Description>Pair F</Description>
+			<Content>
+				<Command>600</Command>
+				<Response>601</Response>
+			</Content>
+		</Pair>
+	</Pairs>
+	<Groups>
+		<Group id="100">
+			<Name>commandA</Name>
+			<Description>Command A</Description>
+			<Type>poll</Type>
+			<Content>
+				<Pair>100</Pair>
+			</Content>
+		</Group>
+		<Group id="101">
+			<Name>commandB</Name>
+			<Description>Command B</Description>
+			<Type>poll</Type>
+			<Content>
+				<Pair>200</Pair>
+			</Content>
+		</Group>
+		<Group id="102">
+			<Name>commandC</Name>
+			<Description>Command C</Description>
+			<Type>poll</Type>
+			<Content>
+				<Pair>300</Pair>
+			</Content>
+		</Group>
+		<Group id="103">
+			<Name>commandD</Name>
+			<Description>Command D</Description>
+			<Type>poll</Type>
+			<Content>
+				<Pair>400</Pair>
+			</Content>
+		</Group>
+		<Group id="104">
+			<Name>commandE</Name>
+			<Description>Command E</Description>
+			<Type>poll</Type>
+			<Content>
+				<Pair>500</Pair>
+			</Content>
+		</Group>
+		<Group id="105">
+			<Name>commandF</Name>
+			<Description>Command F</Description>
+			<Type>poll</Type>
+			<Content>
+				<Pair>600</Pair>
+			</Content>
+		</Group>
+	</Groups>
+	<Triggers>
+		<Trigger id="10">
+			<Name>beforeResponse100</Name>
+			<On id="100">response</On>
+			<Time>before</Time>
+			<Type>action</Type>
+			<Content>
+				<Id>3</Id>
+			</Content>
+		</Trigger>
+		<Trigger id="13">
+			<Name>beforeResponse300</Name>
+			<On id="300">response</On>
+			<Time>before</Time>
+			<Type>action</Type>
+			<Content>
+				<Id>3</Id>
+				<Id>4</Id>
+			</Content>
+		</Trigger>
+		<Trigger id="14">
+			<Name>beforeResponse400</Name>
+			<On id="400">response</On>
+			<Time>before</Time>
+			<Type>action</Type>
+			<Content>
+				<Id>3</Id>
+				<Id>4</Id>
+			</Content>
+		</Trigger>
+		<Trigger id="15">
+			<Name>beforeResponse500</Name>
+			<On id="500">response</On>
+			<Time>before</Time>
+			<Type>action</Type>
+			<Content>
+				<Id>3</Id>
+			</Content>
+		</Trigger>
+		<Trigger id="16">
+			<Name>beforeResponse600</Name>
+			<On id="601">response</On>
+			<Time>before</Time>
+			<Type>action</Type>
+			<Content>
+				<Id>3</Id>
+			</Content>
+		</Trigger>
+		<Trigger id="100">
+			<Name>sendCommandATrigger</Name>
+			<Type>action</Type>
+			<Content>
+				<Id>100</Id>
+			</Content>
+		</Trigger>
+		<Trigger id="101">
+			<Name>sendCommandBTrigger</Name>
+			<Type>action</Type>
+			<Content>
+				<Id>101</Id>
+			</Content>
+		</Trigger>
+		<Trigger id="102">
+			<Name>sendCommandCTrigger</Name>
+			<Type>action</Type>
+			<Content>
+				<Id>102</Id>
+			</Content>
+		</Trigger>
+		<Trigger id="103">
+			<Name>sendCommandDTrigger</Name>
+			<Type>action</Type>
+			<Content>
+				<Id>103</Id>
+			</Content>
+		</Trigger>
+		<Trigger id="104">
+			<Name>sendCommandETrigger</Name>
+			<Type>action</Type>
+			<Content>
+				<Id>104</Id>
+			</Content>
+		</Trigger>
+		<Trigger id="105">
+			<Name>sendCommandFTrigger</Name>
+			<Type>action</Type>
+			<Content>
+				<Id>105</Id>
+			</Content>
+		</Trigger>
+		<Trigger id="1000">
+			<Name>afterResponseWithHeaderAndTrailer</Name>
+			<On id="100">response</On>
+			<Time>after</Time>
+			<Type>action</Type>
+			<Content>
+				<Id>1000</Id>
+			</Content>
+		</Trigger>
+		<Trigger id="1001">
+			<Name>afterResponseWithFixedLengthParametersOnly</Name>
+			<On id="200">response</On>
+			<Time>after</Time>
+			<Type>action</Type>
+			<Content>
+				<Id>1001</Id>
+			</Content>
+		</Trigger>
+		<Trigger id="1002">
+			<Name>afterResponseC</Name>
+			<On id="300">response</On>
+			<Time>after</Time>
+			<Type>action</Type>
+			<Content>
+				<Id>1002</Id>
+			</Content>
+		</Trigger>
+		<Trigger id="1003">
+			<Name>AfterResponseD</Name>
+			<On id="400">response</On>
+			<Time>after</Time>
+			<Type>action</Type>
+			<Content>
+				<Id>1003</Id>
+			</Content>
+		</Trigger>
+		<Trigger id="1004">
+			<Name>afterResponseE</Name>
+			<On id="500">response</On>
+			<Time>after</Time>
+			<Type>action</Type>
+			<Content>
+				<Id>1004</Id>
+			</Content>
+		</Trigger>
+		<Trigger id="1005">
+			<Name>afterResponseF</Name>
+			<On id="601">response</On>
+			<Time>after</Time>
+			<Type>action</Type>
+			<Content>
+				<Id>1005</Id>
+			</Content>
+		</Trigger>
+	</Triggers>
+	<Actions>
+		<Action id="3">
+			<Name>On Response: Read</Name>
+			<On>response</On>
+			<Type>read</Type>
+		</Action>
+		<Action id="4">
+			<Name>Response Length</Name>
+			<On>response</On>
+			<Type>length</Type>
+		</Action>
+		<Action id="100">
+			<Name>SendCommandA</Name>
+			<On id="100">group</On>
+			<Type>execute</Type>
+		</Action>
+		<Action id="101">
+			<Name>SendCommandB</Name>
+			<On id="101">group</On>
+			<Type>execute</Type>
+		</Action>
+		<Action id="102">
+			<Name>SendCommandC</Name>
+			<On id="102">group</On>
+			<Type>execute</Type>
+		</Action>
+		<Action id="103">
+			<Name>SendCommandD</Name>
+			<On id="103">group</On>
+			<Type>execute</Type>
+		</Action>
+		<Action id="104">
+			<Name>SendCommandE</Name>
+			<On id="104">group</On>
+			<Type>execute</Type>
+		</Action>
+		<Action id="105">
+			<Name>SendCommandF</Name>
+			<On id="105">group</On>
+			<Type>execute</Type>
+		</Action>
+		<Action id="1000">
+			<Name>After Response A QAction</Name>
+			<On id="10000">parameter</On>
+			<Type>run actions</Type>
+		</Action>
+		<Action id="1001">
+			<Name>After Response B QAction</Name>
+			<On id="10001">parameter</On>
+			<Type>run actions</Type>
+		</Action>
+		<Action id="1002">
+			<Name>After Response C QAction</Name>
+			<On id="10002">parameter</On>
+			<Type>run actions</Type>
+		</Action>
+		<Action id="1003">
+			<Name>After Response D QAction</Name>
+			<On id="10003">parameter</On>
+			<Type>run actions</Type>
+		</Action>
+		<Action id="1004">
+			<Name>After Response E QAction</Name>
+			<On id="10004">parameter</On>
+			<Type>run actions</Type>
+		</Action>
+		<Action id="1005">
+			<Name>After Response F QAction</Name>
+			<On id="10005">parameter</On>
+			<Type>run actions</Type>
+		</Action>
+	</Actions>
+	<Timers>
+	</Timers>
+	<PortSettings name="IP Connection">
+		<TimeoutTime>
+			<DefaultValue>5000</DefaultValue>
+		</TimeoutTime>
+	</PortSettings>
+	<VersionHistory>
+		<Branches>
+			<Branch id="1">
+				<Comment />
+				<SystemVersions>
+					<SystemVersion id="0">
+						<MajorVersions>
+							<MajorVersion id="0">
+								<MinorVersions>
+									<MinorVersion id="3">
+										<Date>2023-07-28</Date>
+										<Provider>
+											<Author>JST</Author>
+											<Company>Skyline Communications</Company>
+										</Provider>
+										<Changes>
+											<Change>Migrated and updated to quality standards</Change>
+										</Changes>
+										<References>
+											<TaskId>215164</TaskId>
+										</References>
+									</MinorVersion>
+								</MinorVersions>
+							</MajorVersion>
+						</MajorVersions>
+					</SystemVersion>
+				</SystemVersions>
+			</Branch>
+		</Branches>
+	</VersionHistory>
+</Protocol>
