@@ -1771,7 +1771,7 @@ For more information, refer to the Protocol Development Library.
 						<MajorVersions>
 							<MajorVersion id="0">
 								<MinorVersions>
-									<MinorVersion id="3">
+									<MinorVersion id="3" basedOn="1.0.0.3">
 										<Date>2023-07-28</Date>
 										<Provider>
 											<Author>JST</Author>
